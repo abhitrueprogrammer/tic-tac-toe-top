@@ -15,7 +15,7 @@ let GameBoard = (function (){
             return false;
         }
     }
-    return {displayBoard, returnGameBoard, setSquare};
+    return {returnGameBoard, setSquare};
     })();
 
 DisplayController = (function(){
@@ -27,9 +27,14 @@ DisplayController = (function(){
         console.log();
     }
     askForCrds = () =>{
+       let input = prompt("x,y:")
+       let x,y;
+       [x,y] = input.split(",");
+       return [x,y];
         
     }
-})
+    return{displayBoard, askForCrds};
+})();
 function playerFactory(symbol){
     playTurn = (x, y) => {{y}
         if(GameBoard.setSquare(symbol, x,y)){
@@ -44,7 +49,7 @@ function playerFactory(symbol){
 //Play turn without a object in mind.
 function playTurnAndDisplay(playerObject, xPos, yPos){
     playerObject.playTurn(xPos, yPos);
-    GameBoard.displayBoard();
+    DisplayController.displayBoard();
 }
 const game = (function (){
     const playerX = playerFactory('x');
@@ -58,8 +63,9 @@ const game = (function (){
             return 'o';
         }
     } 
-    function play(x,y){
-    console.log(`${whosTurn()}'s turn.`);
+    function play(){
+        console.log(`${whosTurn()}'s turn.`);
+        [x,y] = DisplayController.askForCrds();
         if(xTurn){
             playTurnAndDisplay(playerX, x, y);
         }
@@ -74,5 +80,9 @@ const game = (function (){
     return{play};
 })();
 
+game.play();
+game.play();
+game.play();
+game.play();
 game.play();
 game.play();
