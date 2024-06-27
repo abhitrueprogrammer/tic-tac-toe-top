@@ -1,0 +1,42 @@
+Essential motions:
+j – next line
+k – previous line
+l – going to the right
+h – going to the left
+w – word – go to the next word
+b – back – go to the previous word
+Other helpful motions:
+^ – go to the beginning of the line
+$ – go to the end of the line
+% – jump to corresponding parentheses or bracket
+f – jump to the first occurrence of a character (e.g. f) will jump to the nearest closing parentheses, or f, will jump to the closest comma)
+F – jump to the first previous occurrence of a character
+} – go to the end of the current paragraph
+{ – go to the beginning of the current paragraph
+gg – go to top of file
+42gg – go to line 42
+G – go to bottom of file
+ctrl-o – go to previous location (helpful when you are jumping around multiple files)
+ctrl-i – go to next location
+Markers
+ma – set marker “a” at the current line
+'a – jump to marker “a”
+Operators:
+d – delete/cut
+y – copy
+p – paste
+c – change: delete/cut and go into insert mode
+Repeat operator twice to apply to entire line (e.g. dd – delete whole line)
+Do operator uppercase to apply to the rest of the line (e.g. D – delete from the cursor until the end of the line)
+v – go into visual mode
+ctrl+v – go into visual block mode (helpful for indenting or commenting or otherwise modifying a block of code)
+To indent, once in visual block mode, press I to insert at the beginning of the first line, and indent it as desired
+To unindent, select the whitespace you want to remove, then press d or x
+. – repeat the previous action
+Search/replace:
+In command mode, type /your search term to search
+n to go to next search result, N to go to previous search result
+Type :%s/search term/replacement/g to replace all occurrences of search term in the current file
+Macros:
+qw to record macro “w”. Do some editing, then press q to stop recording.
+@w to replay macro “w”. This will play back all the keystrokes you recorded in the macro.
