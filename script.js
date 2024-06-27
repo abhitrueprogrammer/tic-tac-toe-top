@@ -3,12 +3,6 @@ let GameBoard = (function (){
                     ,[null, null, null]
                     ,[null, null, null]]; //null means nothing added yet
     
-    displayBoard = () =>{
-        for (row in _ticTacToeArray){
-            console.log(_ticTacToeArray[row]);
-        }
-        console.log();
-    } 
     returnGameBoard = ()=>{
        return _ticTacToeArray;
     };
@@ -23,12 +17,21 @@ let GameBoard = (function (){
     }
     return {displayBoard, returnGameBoard, setSquare};
     })();
-// let DisplayController = (function(){
-//     let gameBoard = GameBoard.returnGameBoard();
-// })
 
+DisplayController = (function(){
+    _ticTacToeArray = GameBoard.returnGameBoard(); 
+    displayBoard = () =>{
+        for (row in _ticTacToeArray){
+            console.log(_ticTacToeArray[row]);
+        }
+        console.log();
+    }
+    askForCrds = () =>{
+        
+    }
+})
 function playerFactory(symbol){
-    playTurn = (x, y) => {
+    playTurn = (x, y) => {{y}
         if(GameBoard.setSquare(symbol, x,y)){
             console.log("Square set");
         }
@@ -38,14 +41,38 @@ function playerFactory(symbol){
     }
     return {playTurn}
 }
-function play(playerObject, xPos, yPos){
+//Play turn without a object in mind.
+function playTurnAndDisplay(playerObject, xPos, yPos){
     playerObject.playTurn(xPos, yPos);
     GameBoard.displayBoard();
 }
-let game = function (){
+const game = (function (){
     const playerX = playerFactory('x');
     const playerO = playerFactory('o');
-    play(playerX, 1, 1);
-    play(playerO, 0, 1);
-}
-game();
+    let xTurn = true;
+    function whosTurn(){
+    if(xTurn){
+            return 'x';
+        }
+        else{
+            return 'o';
+        }
+    } 
+    function play(x,y){
+    console.log(`${whosTurn()}'s turn.`);
+        if(xTurn){
+            playTurnAndDisplay(playerX, x, y);
+        }
+        else{
+            playTurnAndDisplay(playerO, x, y);
+        }
+        xTurn = !xTurn;
+        if(checkForWin()){
+            console.log(`${whosTurn()} won!`)
+        }
+    }
+    return{play};
+})();
+
+game.play();
+game.play();
