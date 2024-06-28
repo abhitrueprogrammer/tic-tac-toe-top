@@ -55,6 +55,10 @@ const game = (function (){
     const playerX = playerFactory('x');
     const playerO = playerFactory('o');
     let xTurn = true;
+    let gameOver = false;
+    function getGameOver(){
+        return gameOver
+    }
     function whosTurn(){
     if(xTurn){
             return 'x';
@@ -74,15 +78,13 @@ const game = (function (){
         }
         xTurn = !xTurn;
         if(checkForWin()){
+            gameOver = true;
             console.log(`${whosTurn()} won!`)
         }
     }
-    return{play};
+    return{getGameOver, play};
 })();
 
-game.play();
-game.play();
-game.play();
-game.play();
-game.play();
-game.play();
+while(!game.getGameOver()){
+    game.play();
+}
