@@ -1,4 +1,4 @@
-let GameBoard = (function (){
+const GameBoard = (function (){
     let _ticTacToeArray = [[null, null, null]
                     ,[null, null, null]
                     ,[null, null, null]]; //null means nothing added yet
@@ -15,14 +15,29 @@ let GameBoard = (function (){
             return false;
         }
     }
+    checkEveryElementSameInArray = (arr) =>{
+        return arr.every((value, index, arr)=> value === arr[0]);
+    }
     checkForWin = ()=>{
         for(row of _ticTacToeArray){
             if(row[0] === null){
                 continue;
             }
-            const everyRowSame = row.every((value, index, arr)=> value === arr[0])
-            console.log(everyRowSame);
+            const everyRowSame = checkEveryElementSameInArray(row); 
             if(everyRowSame){
+                return true;
+            }
+        }
+        for(let i = 0; i < _ticTacToeArray.length ;i++ ){
+            const column = []
+            for(let j = 0; j <_ticTacToeArray.length ; j++){
+                column.push(_ticTacToeArray[j][i]);
+            }
+            if(column[0] === null){
+                continue;
+            }
+            const everyColumnSame = checkEveryElementSameInArray(column);
+            if(everyColumnSame){
                 return true;
             }
 
@@ -31,7 +46,7 @@ let GameBoard = (function (){
     return {checkForWin, returnGameBoard, setSquare};
     })();
 
-DisplayController = (function(){
+const DisplayController = (function(){
     _ticTacToeArray = GameBoard.returnGameBoard(); 
     displayBoard = () =>{
         for (row in _ticTacToeArray){
@@ -48,8 +63,9 @@ DisplayController = (function(){
     }
     return{displayBoard, askForCrds};
 })();
+
 function playerFactory(symbol){
-    playTurn = (x, y) => {{y}
+    playTurn = (x, y) => {
         if(GameBoard.setSquare(symbol, x,y)){
             console.log("Square set");
         }
@@ -59,11 +75,7 @@ function playerFactory(symbol){
     }
     return {playTurn}
 }
-//Play turn without a object in mind.
-function playTurnAndDisplay(playerObject, xPos, yPos){
-    playerObject.playTurn(xPos, yPos);
-    DisplayController.displayBoard();
-}
+
 const game = (function (){
     const playerX = playerFactory('x');
     const playerO = playerFactory('o');
@@ -80,6 +92,11 @@ const game = (function (){
             return 'o';
         }
     } 
+    //Play turn without a object in mind.
+    function playTurnAndDisplay(playerObject, xPos, yPos){
+        playerObject.playTurn(xPos, yPos);
+        DisplayController.displayBoard();
+    }
     function play(){
         console.log(`${whosTurn()}'s turn.`);
         [x,y] = DisplayController.askForCrds();
