@@ -2,12 +2,15 @@ const GameBoard = (function (){
     let _ticTacToeArray = [[null, null, null]
                     ,[null, null, null]
                     ,[null, null, null]]; //null means nothing added yet
-    
+    rowLength = _ticTacToeArray.length;
+    getDimention = ()=>{
+        return rowLength;
+    }
     returnGameBoard = ()=>{
        return _ticTacToeArray;
     };
     setSquare = (symbol, xPos, yPos) => {
-        if (_ticTacToeArray[xPos][yPos] == null){
+        if (_ticTacToeArray[xPos][yPos] === null){
             _ticTacToeArray[xPos][yPos] = symbol;
             return true;
         }
@@ -15,19 +18,31 @@ const GameBoard = (function (){
             return false;
         }
     }
-    checkEveryElementSameInArray = (arr) =>{
+    getSquare = (i, j) =>{
+        return _ticTacToeArray[i][j];
+    }
+    checkEveryElementSameInArrayWithoutBeingNull = (arr) =>{
+        if(arr[0] === null){
+            return false;  
+        }
         return arr.every((value, index, arr)=> value === arr[0]);
     }
+    checkForDraw = () =>{
+            return !_ticTacToeArray.some(row => row.some(element => element === null));
+    }
     checkForWin = ()=>{
+        //row check
         for(row of _ticTacToeArray){
             if(row[0] === null){
                 continue;
             }
-            const everyRowSame = checkEveryElementSameInArray(row); 
+            const everyRowSame = checkEveryElementSameInArrayWithoutBeingNull(row); 
             if(everyRowSame){
                 return true;
             }
         }
+        
+        //column check
         for(let i = 0; i < _ticTacToeArray.length ;i++ ){
             const column = []
             for(let j = 0; j <_ticTacToeArray.length ; j++){
@@ -36,14 +51,30 @@ const GameBoard = (function (){
             if(column[0] === null){
                 continue;
             }
-            const everyColumnSame = checkEveryElementSameInArray(column);
+            const everyColumnSame = checkEveryElementSameInArrayWithoutBeingNull(column);
             if(everyColumnSame){
                 return true;
             }
-
+        }
+        //diagonal check
+        const diagonal = []
+        for(let i = 0; i < _ticTacToeArray.length; i++){
+            diagonal.push(_ticTacToeArray[i][i]);
+        }
+        const everyDiagonalSameii = checkEveryElementSameInArrayWithoutBeingNull(diagonal);
+        if(everyDiagonalSameii){
+            return true;
+        }
+        diagonal.length = 0;
+        for(let i = 0, j = _ticTacToeArray.length-1; i < _ticTacToeArray.length; i++, j--){
+            diagonal.push(_ticTacToeArray[i][j]);
+        }
+        const everyDiagonalSameij = checkEveryElementSameInArrayWithoutBeingNull(diagonal);
+        if(everyDiagonalSameij){
+            return true;
         }
     }
-    return {checkForWin, returnGameBoard, setSquare};
+    return {checkForWin, returnGameBoard, getSquare, setSquare, checkForDraw};
     })();
 
 const DisplayController = (function(){
@@ -55,11 +86,16 @@ const DisplayController = (function(){
         console.log();
     }
     askForCrds = () =>{
-       let input = prompt("x,y:")
-       let x,y;
-       [x,y] = input.split(",");
-       return [x,y];
-        
+        do{
+            let input = prompt("x,y:")
+            let x,y;
+            [x,y] = input.split(",");
+            x = x.trim();
+            y = y.trim();
+            return [x,y];
+        }
+        while(isNaN(x) || isNaN(y) || x < 0 || x > GameBoard.getDimention() - 1 || y < 0 || y > GameBoard.getDimention -1); 
+        //find way to display "ERROR WRONG USER INPUT" if fails. 
     }
     return{displayBoard, askForCrds};
 })();
@@ -68,9 +104,11 @@ function playerFactory(symbol){
     playTurn = (x, y) => {
         if(GameBoard.setSquare(symbol, x,y)){
             console.log("Square set");
+            return true
         }
         else{
             console.log("Square already taken");
+            return false
         }
     }
     return {playTurn}
@@ -92,7 +130,7 @@ const game = (function (){
             return 'o';
         }
     } 
-    //Play turn without a object in mind.
+    //Play turn with specified object
     function playTurnAndDisplay(playerObject, xPos, yPos){
         playerObject.playTurn(xPos, yPos);
         DisplayController.displayBoard();
@@ -100,6 +138,10 @@ const game = (function (){
     function play(){
         console.log(`${whosTurn()}'s turn.`);
         [x,y] = DisplayController.askForCrds();
+        while(GameBoard.getSquare(x,y) !== null){
+            console.log("Square already taken");
+            [x,y] = DisplayController.askForCrds();
+        }
         if(xTurn){
             playTurnAndDisplay(playerX, x, y);
         }
@@ -109,6 +151,10 @@ const game = (function (){
         if(GameBoard.checkForWin()){
             gameOver = true;
             console.log(`${whosTurn()} won!`)
+        }
+        if(GameBoard.checkForDraw()){
+            gameOver = true;
+            console.log(`tie!`);
         }
         xTurn = !xTurn;
     }
