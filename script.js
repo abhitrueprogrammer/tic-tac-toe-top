@@ -17,7 +17,10 @@ let GameBoard = (function (){
     }
     checkForWin = ()=>{
         for(row of _ticTacToeArray){
-            const everyRowSame = row.every((value, index, arr)=> value === arr[0]);
+            if(row[0] === null){
+                continue;
+            }
+            const everyRowSame = row.every((value, index, arr)=> value === arr[0])
             console.log(everyRowSame);
             if(everyRowSame){
                 return true;
