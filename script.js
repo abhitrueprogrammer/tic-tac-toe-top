@@ -15,7 +15,17 @@ let GameBoard = (function (){
             return false;
         }
     }
-    return {returnGameBoard, setSquare};
+    checkForWin = ()=>{
+        for(row of _ticTacToeArray){
+            const everyRowSame = row.every((value, index, arr)=> value === arr[0]);
+            console.log(everyRowSame);
+            if(everyRowSame){
+                return true;
+            }
+
+        }
+    }
+    return {checkForWin, returnGameBoard, setSquare};
     })();
 
 DisplayController = (function(){
@@ -76,11 +86,11 @@ const game = (function (){
         else{
             playTurnAndDisplay(playerO, x, y);
         }
-        xTurn = !xTurn;
-        if(checkForWin()){
+        if(GameBoard.checkForWin()){
             gameOver = true;
             console.log(`${whosTurn()} won!`)
         }
+        xTurn = !xTurn;
     }
     return{getGameOver, play};
 })();
