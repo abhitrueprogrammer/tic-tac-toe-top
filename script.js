@@ -1,7 +1,15 @@
 const GameBoard = (function (){
-    let _ticTacToeArray = [[null, null, null]
-                    ,[null, null, null]
-                    ,[null, null, null]]; //null means nothing added yet
+    // let _ticTacToeArray = [[null, null, null]
+    //                 ,[null, null, null]
+    //                 ,[null, null, null]]; //null means nothing added yet
+    const emptySquare = '';
+    let _ticTacToeArray = [['x', 'o', 'x']
+                    ,['o', 'o', 'x']
+                    ,['x', 'x', 'x']]; //null means nothing added yet
+    
+    // let _ticTacToeArray = [['o', '', '']
+    //                 ,['', '', '']
+    //                 ,['', '', '']]; //null means nothing added yet
     rowLength = _ticTacToeArray.length;
     getDimention = ()=>{
         return rowLength;
@@ -10,7 +18,7 @@ const GameBoard = (function (){
        return _ticTacToeArray;
     };
     setSquare = (symbol, xPos, yPos) => {
-        if (_ticTacToeArray[xPos][yPos] === null){
+        if (_ticTacToeArray[xPos][yPos] === GameBoard.emptySquare){
             _ticTacToeArray[xPos][yPos] = symbol;
             return true;
         }
@@ -22,18 +30,18 @@ const GameBoard = (function (){
         return _ticTacToeArray[i][j];
     }
     checkEveryElementSameInArrayWithoutBeingNull = (arr) =>{
-        if(arr[0] === null){
+        if(arr[0] === GameBoard.emptySquare){
             return false;  
         }
         return arr.every((value, index, arr)=> value === arr[0]);
     }
     checkForDraw = () =>{
-            return !_ticTacToeArray.some(row => row.some(element => element === null));
+            return !_ticTacToeArray.some(row => row.some(element => element === GameBoard.emptySquare));
     }
     checkForWin = ()=>{
         //row check
         for(row of _ticTacToeArray){
-            if(row[0] === null){
+            if(row[0] === GameBoard.emptySquare){
                 continue;
             }
             const everyRowSame = checkEveryElementSameInArrayWithoutBeingNull(row); 
@@ -43,12 +51,12 @@ const GameBoard = (function (){
         }
         
         //column check
-        for(let i = 0; i < _ticTacToeArray.length ;i++ ){
+        for(let i = 0; i < _ticTacToeArray.length ;i++){
             const column = []
             for(let j = 0; j <_ticTacToeArray.length ; j++){
                 column.push(_ticTacToeArray[j][i]);
             }
-            if(column[0] === null){
+            if(column[0] === GameBoard.emptySquare){
                 continue;
             }
             const everyColumnSame = checkEveryElementSameInArrayWithoutBeingNull(column);
@@ -74,10 +82,10 @@ const GameBoard = (function (){
             return true;
         }
     }
-    return {checkForWin, returnGameBoard, getSquare, setSquare, checkForDraw};
+    return {emptySquare, checkForWin, returnGameBoard, getSquare, setSquare, checkForDraw, getDimention};
     })();
 
-const DisplayController = (function(){
+const DisplayControllerConsole = (function(){
     _ticTacToeArray = GameBoard.returnGameBoard(); 
     displayBoard = () =>{
         for (row in _ticTacToeArray){
@@ -99,7 +107,36 @@ const DisplayController = (function(){
     }
     return{displayBoard, askForCrds};
 })();
-
+const DisplayController = (function(){
+    _ticTacToeArray = GameBoard.returnGameBoard();
+    const gameBoardHTML = document.querySelector('.game-board')
+    createBoard = () =>{
+        for(let i = 0; i < GameBoard.getDimention(); i++){
+            const row = document.createElement('div');
+            row.classList.toggle(`row`);
+            for(let j = 0; j < GameBoard.getDimention(); j++) 
+            {
+                const cell = document.createElement('div');
+                cell.id = `c${i}${j}`;
+                cell.classList.toggle('cell');
+                row.appendChild(cell);
+                gameBoardHTML.appendChild(row);
+            }
+            
+        }
+    }
+    updateBoard = () => {
+        const cells = document.querySelectorAll('.cell');
+        for(let i = 0; i < GameBoard.getDimention(); i++){
+            for(let j = 0; j < GameBoard.getDimention(); j++){
+                const cell = document.querySelector(`#c${i}${j}`);
+                cell.textContent = _ticTacToeArray[i][j];
+            }
+        }
+    }
+    return {createBoard, updateBoard};
+})();
+DisplayController.updateBoard();
 function playerFactory(symbol){
     playTurn = (x, y) => {
         if(GameBoard.setSquare(symbol, x,y)){
@@ -133,14 +170,15 @@ const game = (function (){
     //Play turn with specified object
     function playTurnAndDisplay(playerObject, xPos, yPos){
         playerObject.playTurn(xPos, yPos);
-        DisplayController.displayBoard();
+        DisplayControllerConsole.displayBoard();
+        DisplayController.updateBoard();
     }
     function play(){
         console.log(`${whosTurn()}'s turn.`);
-        [x,y] = DisplayController.askForCrds();
-        while(GameBoard.getSquare(x,y) !== null){
+        [x,y] = DisplayControllerConsole.askForCrds();
+        while(GameBoard.getSquare(x,y) !== GameBoard.emptySquare){
             console.log("Square already taken");
-            [x,y] = DisplayController.askForCrds();
+            [x,y] = DisplayControllerConsole.askForCrds();
         }
         if(xTurn){
             playTurnAndDisplay(playerX, x, y);
@@ -161,6 +199,6 @@ const game = (function (){
     return{getGameOver, play};
 })();
 
-while(!game.getGameOver()){
-    game.play();
-}
+// while(!game.getGameOver()){
+//     game.play();
+// }
