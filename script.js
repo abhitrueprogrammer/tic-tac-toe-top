@@ -3,13 +3,13 @@ const GameBoard = (function (){
     //                 ,[null, null, null]
     //                 ,[null, null, null]]; //null means nothing added yet
     const emptySquare = '';
-    let _ticTacToeArray = [['x', '', 'o']
-                    ,['o', 'o', 'x']
-                    ,['x', 'x', 'x']]; //null means nothing added yet
+    // let _ticTacToeArray = [['x', '', 'o']
+    //                 ,['o', 'o', 'x']
+    //                 ,['x', 'x', 'x']]; //null means nothing added yet
     
-    // let _ticTacToeArray = [['o', '', '']
-    //                 ,['', '', '']
-    //                 ,['', '', '']]; //null means nothing added yet
+    let _ticTacToeArray = [['', '', '']
+                    ,['', '', '']
+                    ,['', '', '']]; //null means nothing added yet
     rowLength = _ticTacToeArray.length;
     getDimention = ()=>{
         return rowLength;
@@ -191,12 +191,15 @@ const game = (function (){
         if(GameBoard.checkForWin()){
             gameOver = true;
             console.log(`${whosTurn()} won!`)
+            return [whosTurn, 'w'];
         }
         if(GameBoard.checkForDraw()){
             gameOver = true;
             console.log(`tie!`);
+            return [whosTurn, 't'];
         }
         xTurn = !xTurn;
+        return [whosTurn, '-'];
     }
     return{getGameOver, play};
 })();
@@ -214,7 +217,7 @@ for(const button of buttons){
         // [x,y] = DisplayControllerConsole.askForCrds();
         }
        game.play(i,j); 
-       DisplayController.updateCell(i,j)
+       DisplayController.updateCell(i,j);
     })
 }
 //TODO: I think if x wins if board full then tie will also get displayed. Also end game once winner is there, perhaps display modal when winner is selected.
