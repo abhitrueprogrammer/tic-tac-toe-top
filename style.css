@@ -1,14 +1,14 @@
 
 .game-board{
     display: grid;
-    height: 299px;
-    width: 299px;
+    min-height: 299px;
+    min-width: 299px;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     justify-items: center;
     align-items: center; 
     margin: 50px;
-    font-size: 3rem;
+    font-size: 4rem;
     gap: 10px;
     background-color: black;
 }
@@ -21,6 +21,51 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+dialog[open]{
+    font-size: 4rem;
+    width: 350px;
+    display: grid;
+    justify-content: center;
+    /* position: relative;
+    top: 0; */
+    background-color: rgba(255, 255, 255, 0.966);
+}
+dialog[open] button{
+    grid-row: 2/3;
+    padding: 20px;
+    border-radius: 3px;
+    font-size: 2rem;
+    color: white;
+    font-weight: 800;
+    background-color: rgb(255, 140, 140);
+}
+dialog[open] button:hover{
+    background-color: rgb(255, 86, 86);
+}
+dialog[open] button:active{
+    background-color: rgb(255, 206, 206);
+}
+body{
+    width: 100vw;
+    height: 100vh;
+
+}
+body > h1{
+    text-align: center;
+    margin-top: 30px;
+
+}
+.game-board-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;   
+}
+.error-msg{
+    color: red;
+    text-align: center;
+    font-weight: 600;
 }
 /* .game-board > *{
     border

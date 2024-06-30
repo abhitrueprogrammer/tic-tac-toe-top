@@ -191,15 +191,15 @@ const game = (function (){
         if(GameBoard.checkForWin()){
             gameOver = true;
             console.log(`${whosTurn()} won!`)
-            return [whosTurn, 'w'];
+            return [whosTurn(), 'w'];
         }
         if(GameBoard.checkForDraw()){
             gameOver = true;
             console.log(`tie!`);
-            return [whosTurn, 't'];
+            return [whosTurn(), 't'];
         }
         xTurn = !xTurn;
-        return [whosTurn, '-'];
+        return [whosTurn(), '-'];
     }
     return{getGameOver, play};
 })();
@@ -207,17 +207,37 @@ const game = (function (){
 // while(!game.getGameOver()){
 //     game.play();
 // }
+
 DisplayController.updateBoard();
 const buttons = document.querySelectorAll('.cell');
 for(const button of buttons){
-    button.addEventListener('click', ()=>{
+    button.addEventListener('click', (e)=>{
         [i,j] = DisplayController.getIJFromCellName(button.id);
-       if(GameBoard.getSquare(i,j) !== GameBoard.emptySquare){
-        console.log("Square already taken");
+        if(GameBoard.getSquare(i,j) !== GameBoard.emptySquare){
+            
+            const errorMessageHTML = document.querySelector('.error-msg');
+            errorMessageHTML.textContent = "Square already taken" 
+            console.log("Square already taken");
+            return;
         // [x,y] = DisplayControllerConsole.askForCrds();
         }
-       game.play(i,j); 
+        [lastPlayer, state] = game.play(i,j); 
+        if(state == 'w'|| state == 't'){
+            const dialog = document.querySelector('dialog');
+            const endGame = document.createElement('p')
+            if(state ==='w'){
+                console.log('winner detected!')
+                endGame.textContent = `${lastPlayer} won!`
+            }
+            else if(state==='t'){
+                endGame.textContent = `Tie.`
+            }
+            dialog.appendChild(endGame);
+            dialog.showModal();
+        }
        DisplayController.updateCell(i,j);
     })
 }
-//TODO: I think if x wins if board full then tie will also get displayed. Also end game once winner is there, perhaps display modal when winner is selected.
+
+
+// Display winner text. Also end game once winner is there, perhaps display modal when winner is selected.
