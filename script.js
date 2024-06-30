@@ -231,10 +231,10 @@ resetButton.addEventListener("click",()=>{
 })
 for(const button of buttons){
     button.addEventListener('click', (e)=>{
+        const errorMessageHTML = document.querySelector('.error-msg');
+        errorMessageHTML.textContent = "";
         [i,j] = DisplayController.getIJFromCellName(button.id);
         if(GameBoard.getSquare(i,j) !== GameBoard.emptySquare){
-            
-            const errorMessageHTML = document.querySelector('.error-msg');
             errorMessageHTML.textContent = "Square already taken" 
             console.log("Square already taken");
             return;
