@@ -3,7 +3,7 @@ const GameBoard = (function (){
     //                 ,[null, null, null]
     //                 ,[null, null, null]]; //null means nothing added yet
     const emptySquare = '';
-    let _ticTacToeArray = [['x', 'o', 'x']
+    let _ticTacToeArray = [['x', '', 'o']
                     ,['o', 'o', 'x']
                     ,['x', 'x', 'x']]; //null means nothing added yet
     
@@ -137,10 +137,10 @@ const DisplayController = (function(){
         const cell = document.querySelector(`#c${i}${j}`);
         cell.textContent = _ticTacToeArray[i][j];
     }
-    inputCoords = (i,j) =>{
-        
+    getIJFromCellName = (cellName) =>{
+        return cellName.slice(1).split("");
     }
-    return {createBoard, updateBoard};
+    return {updateCell, updateBoard, getIJFromCellName};
 })();
 function playerFactory(symbol){
     playTurn = (x, y) => {
@@ -178,13 +178,10 @@ const game = (function (){
         DisplayControllerConsole.displayBoard();
         DisplayController.updateCell(xPos, yPos);
     }
-    function play(){
+    function play(x, y){
         console.log(`${whosTurn()}'s turn.`);
-        [x,y] = DisplayControllerConsole.askForCrds();
-        while(GameBoard.getSquare(x,y) !== GameBoard.emptySquare){
-            console.log("Square already taken");
-            [x,y] = DisplayControllerConsole.askForCrds();
-        }
+        // Comment to be deleted: [x,y] = DisplayControllerConsole.askForCrds();
+        
         if(xTurn){
             playTurnAndDisplay(playerX, x, y);
         }
@@ -207,9 +204,17 @@ const game = (function (){
 // while(!game.getGameOver()){
 //     game.play();
 // }
+DisplayController.updateBoard();
 const buttons = document.querySelectorAll('.cell');
 for(const button of buttons){
     button.addEventListener('click', ()=>{
-        console.log(button.id) 
+        [i,j] = DisplayController.getIJFromCellName(button.id);
+       if(GameBoard.getSquare(i,j) !== GameBoard.emptySquare){
+        console.log("Square already taken");
+        // [x,y] = DisplayControllerConsole.askForCrds();
+        }
+       game.play(i,j); 
+       DisplayController.updateCell(i,j)
     })
 }
+//TODO: I think if x wins if board full then tie will also get displayed. Also end game once winner is there, perhaps display modal when winner is selected.
