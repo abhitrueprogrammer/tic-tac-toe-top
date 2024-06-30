@@ -92,8 +92,8 @@ const GameBoard = (function (){
     })();
 
 const DisplayControllerConsole = (function(){
-    _ticTacToeArray = GameBoard.returnGameBoard(); 
     displayBoard = () =>{
+        _ticTacToeArray = GameBoard.returnGameBoard(); 
         for (row in _ticTacToeArray){
             console.log(_ticTacToeArray[row]);
         }
@@ -114,7 +114,6 @@ const DisplayControllerConsole = (function(){
     return{displayBoard, askForCrds};
 })();
 const DisplayController = (function(){
-    _ticTacToeArray = GameBoard.returnGameBoard();
     const gameBoardHTML = document.querySelector('.game-board')
     createBoard = () =>{
         for(let i = 0; i < GameBoard.getDimention(); i++){
@@ -145,9 +144,9 @@ const DisplayController = (function(){
             cell.textContent = GameBoard.getSquare(i,j);
         }
     }
-    updateCell = (i,j) => {
+    updateCell = (i,j) => {       
         const cell = document.querySelector(`#c${i}${j}`);
-        cell.textContent = _ticTacToeArray[i][j];
+        cell.textContent = GameBoard.getSquare(i,j);
     }
     getIJFromCellName = (cellName) =>{
         return cellName.slice(1).split("");
@@ -244,15 +243,14 @@ for(const button of buttons){
         [lastPlayer, state] = game.play(i,j); 
         if(state == 'w'|| state == 't'){
             const dialog = document.querySelector('dialog');
-            const endGame = document.createElement('p')
+            const endGameMsg = document.querySelector('dialog p')
             if(state ==='w'){
                 console.log('winner detected!')
-                endGame.textContent = `${lastPlayer} won!`
+                endGameMsg.textContent = `${lastPlayer} won!`
             }
             else if(state==='t'){
-                endGame.textContent = `Tie.`
+                endGameMsg.textContent = `Tie.`
             }
-            dialog.appendChild(endGame);
             dialog.showModal();
         }
        DisplayController.updateCell(i,j);
