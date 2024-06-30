@@ -10,23 +10,38 @@
 </head>
 
 <body>
-    <h1>Tic Tac Toe</h1>
+
 <!-- TODO: left and right enter names optionally in form. -->
 <!-- TODO: If names are there say "name won" if not, say "X won" -->
-    <div class="game-board-container">
-        <div class="game-board">
-            <div id="c00" class="cell"></div>
-            <div id="c01" class="cell"></div>
-            <div id="c02" class="cell"></div>
-            <div id="c10" class="cell"></div>
-            <div id="c11" class="cell"></div>
-            <div id="c12" class="cell"></div>
-            <div id="c20" class="cell"></div>
-            <div id="c21" class="cell"></div>
-            <div id="c22" class="cell"></div>
+    <div class="form-board-area">
+        <div class="form-area">
+            <form action="">
+                <label for="x-name">Player X's name: </label>
+                <input id="x-name" type="text">
+            </form>
+            <form action="">
+                <label for="o-name">Player O's name: </label>
+                <input id="o-name" type="text">
+            </form>
+        </div>    
+        <div class="game-board-area">
+            <h1>Tic Tac Toe</h1>
+            
+            <div class="game-board">
+                <div id="c00" class="cell"></div>
+                <div id="c01" class="cell"></div>
+                <div id="c02" class="cell"></div>
+                <div id="c10" class="cell"></div>
+                <div id="c11" class="cell"></div>
+                <div id="c12" class="cell"></div>
+                <div id="c20" class="cell"></div>
+                <div id="c21" class="cell"></div>
+                <div id="c22" class="cell"></div>
+            </div>
         </div>
-        <p class="error-msg"></p>
+
     </div>
+    <p class="error-msg"></p>
     <dialog>
         <button class="reset-btn" autofocus>↺</button>
         <p></p>
