@@ -60,7 +60,7 @@ body > h1{
 .form-board-area{
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 1fr 5fr;
+    grid-template-columns: 1fr 5fr 1fr;
     justify-content: center;
     align-items: center;
 }
