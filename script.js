@@ -7,9 +7,10 @@ const GameBoard = (function (){
     //                 ,['o', 'o', 'x']
     //                 ,['x', 'x', 'x']]; //null means nothing added yet
     
-    let _ticTacToeArray = [['', '', '']
+    const _ticTacToeArrayInitial = [['', '', '']
                     ,['', '', '']
                     ,['', '', '']]; //null means nothing added yet
+    let _ticTacToeArray = structuredClone(_ticTacToeArrayInitial);
     rowLength = _ticTacToeArray.length;
     getDimention = ()=>{
         return rowLength;
@@ -17,6 +18,11 @@ const GameBoard = (function (){
     returnGameBoard = ()=>{
        return _ticTacToeArray;
     };
+    reset = () =>{
+        console.log(_ticTacToeArrayInitial)
+        _ticTacToeArray = structuredClone(_ticTacToeArrayInitial);
+        console.log(_ticTacToeArray);
+    }
     setSquare = (symbol, xPos, yPos) => {
         if (_ticTacToeArray[xPos][yPos] === GameBoard.emptySquare){
             _ticTacToeArray[xPos][yPos] = symbol;
@@ -82,7 +88,7 @@ const GameBoard = (function (){
             return true;
         }
     }
-    return {emptySquare, checkForWin, returnGameBoard, getSquare, setSquare, checkForDraw, getDimention};
+    return {reset, emptySquare, checkForWin, returnGameBoard, getSquare, setSquare, checkForDraw, getDimention};
     })();
 
 const DisplayControllerConsole = (function(){
@@ -126,11 +132,17 @@ const DisplayController = (function(){
         }
     }
     updateBoard = () => {
-        for(let i = 0; i < GameBoard.getDimention(); i++){
-            for(let j = 0; j < GameBoard.getDimention(); j++){
-                const cell = document.querySelector(`#c${i}${j}`);
-                cell.textContent = _ticTacToeArray[i][j];
-            }
+        // for(let i = 0; i < GameBoard.getDimention(); i++){
+        //     for(let j = 0; j < GameBoard.getDimention(); j++){
+        //         const cell = document.querySelector(`#c${i}${j}`);
+        //         cell.textContent = _ticTacToeArray[i][j];
+        //     }
+        // }
+        const cells = document.querySelectorAll('.cell');
+        console.log(cells);
+        for(cell of cells){
+            [i,j] = getIJFromCellName(cell.id);
+            cell.textContent = GameBoard.getSquare(i,j);
         }
     }
     updateCell = (i,j) => {
@@ -210,6 +222,14 @@ const game = (function (){
 
 DisplayController.updateBoard();
 const buttons = document.querySelectorAll('.cell');
+const resetButton = document.querySelector('.reset-btn')
+resetButton.addEventListener("click",()=>{
+    console.log("reset ");
+    GameBoard.reset();
+    DisplayController.updateBoard();
+    const dialog = document.querySelector('dialog');
+    dialog.close();
+})
 for(const button of buttons){
     button.addEventListener('click', (e)=>{
         [i,j] = DisplayController.getIJFromCellName(button.id);
