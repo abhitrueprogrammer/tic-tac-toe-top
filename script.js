@@ -126,7 +126,6 @@ const DisplayController = (function(){
         }
     }
     updateBoard = () => {
-        const cells = document.querySelectorAll('.cell');
         for(let i = 0; i < GameBoard.getDimention(); i++){
             for(let j = 0; j < GameBoard.getDimention(); j++){
                 const cell = document.querySelector(`#c${i}${j}`);
@@ -134,9 +133,15 @@ const DisplayController = (function(){
             }
         }
     }
+    updateCell = (i,j) => {
+        const cell = document.querySelector(`#c${i}${j}`);
+        cell.textContent = _ticTacToeArray[i][j];
+    }
+    inputCoords = (i,j) =>{
+        
+    }
     return {createBoard, updateBoard};
 })();
-DisplayController.updateBoard();
 function playerFactory(symbol){
     playTurn = (x, y) => {
         if(GameBoard.setSquare(symbol, x,y)){
@@ -171,7 +176,7 @@ const game = (function (){
     function playTurnAndDisplay(playerObject, xPos, yPos){
         playerObject.playTurn(xPos, yPos);
         DisplayControllerConsole.displayBoard();
-        DisplayController.updateBoard();
+        DisplayController.updateCell(xPos, yPos);
     }
     function play(){
         console.log(`${whosTurn()}'s turn.`);
@@ -202,3 +207,9 @@ const game = (function (){
 // while(!game.getGameOver()){
 //     game.play();
 // }
+const buttons = document.querySelectorAll('.cell');
+for(const button of buttons){
+    button.addEventListener('click', ()=>{
+        console.log(button.id) 
+    })
+}
