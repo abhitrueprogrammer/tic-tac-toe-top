@@ -130,6 +130,11 @@ const DisplayController = (function(){
             
         }
     }
+    //Takes in last player name and outputs next player name on display
+    showNextPlayerName = (nextPlayer) => {
+        const nextPlayerMessage = document.querySelector('p.next-player-msg');
+        nextPlayerMessage.textContent = `${nextPlayer}'s turn.`
+    }
     updateBoard = () => {
         // for(let i = 0; i < GameBoard.getDimention(); i++){
         //     for(let j = 0; j < GameBoard.getDimention(); j++){
@@ -151,7 +156,7 @@ const DisplayController = (function(){
     getIJFromCellName = (cellName) =>{
         return cellName.slice(1).split("");
     }
-    return {updateCell, updateBoard, getIJFromCellName};
+    return {updateCell, updateBoard, getIJFromCellName, showNextPlayerName};
 })();
 function playerFactory(symbol){
     playTurn = (x, y) => {
@@ -172,6 +177,10 @@ const game = (function (){
     const playerO = playerFactory('o');
     let xTurn = true;
     let gameOver = false;
+    function reset(){
+        gameOver = false;
+        xTurn = true;
+    }
     function getGameOver(){
         return gameOver
     }
@@ -212,25 +221,29 @@ const game = (function (){
         xTurn = !xTurn;
         return [whosTurn(), '-'];
     }
-    return{getGameOver, play};
+    return{getGameOver, play, whosTurn, reset};
 })();
 
 // while(!game.getGameOver()){
 //     game.play();
 // }
 
+DisplayController.showNextPlayerName(game.whosTurn());
 DisplayController.updateBoard();
 const buttons = document.querySelectorAll('.cell');
 const resetButton = document.querySelector('.reset-btn')
 resetButton.addEventListener("click",()=>{
-    console.log("reset ");
+    console.log("reset");
     GameBoard.reset();
     DisplayController.updateBoard();
+    game.reset()
+    DisplayController.showNextPlayerName(game.whosTurn());
     const dialog = document.querySelector('dialog');
     dialog.close();
 })
 for(const button of buttons){
     button.addEventListener('click', (e)=>{
+        // DisplayController.updateBoard();
         const errorMessageHTML = document.querySelector('.error-msg');
         errorMessageHTML.textContent = "";
         [i,j] = DisplayController.getIJFromCellName(button.id);
@@ -259,7 +272,8 @@ for(const button of buttons){
             }
             dialog.showModal();
         }
-       DisplayController.updateCell(i,j);
+        DisplayController.showNextPlayerName(game.whosTurn());
+        DisplayController.updateCell(i,j);
     })
 }
 

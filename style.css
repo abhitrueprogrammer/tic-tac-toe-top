@@ -17,7 +17,9 @@
     height: 100%;
     background-color: white;
 }
-
+.form-area{
+    margin-top: 30px ;
+}
 .cell{
     display: flex;
     justify-content: center;
@@ -62,7 +64,6 @@ body > h1{
     grid-auto-flow: column;
     grid-template-columns: 1fr 5fr 1fr;
     justify-content: center;
-    align-items: center;
 }
 .error-msg{
     color: red;
@@ -77,6 +78,10 @@ form > *{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.next-player-msg{
+    font-size: 1.3em;
+    text-align: center;
 }
 @media only screen and (max-width: 600px){
     .form-board-area{
