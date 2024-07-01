@@ -246,7 +246,13 @@ for(const button of buttons){
             const endGameMsg = document.querySelector('dialog p')
             if(state ==='w'){
                 console.log('winner detected!')
-                endGameMsg.textContent = `${lastPlayer} won!`
+                playerName = document.querySelector(`#${lastPlayer}-name`);
+                if(playerName.value === ""){
+                    endGameMsg.textContent = `${lastPlayer} won!`
+                }
+                else{
+                    endGameMsg.textContent = `${playerName.value} won!`
+                }
             }
             else if(state==='t'){
                 endGameMsg.textContent = `Tie.`
