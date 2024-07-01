@@ -18,7 +18,8 @@
     background-color: white;
 }
 .form-area{
-    margin-top: 30px ;
+    margin-top: 30px;
+    margin-left: 30px; 
 }
 .cell{
     display: flex;
@@ -48,11 +49,6 @@ dialog[open] button:hover{
 }
 dialog[open] button:active{
     background-color: rgb(255, 206, 206);
-}
-body{
-    width: 100vw;
-    height: 100vh;
-
 }
 body > h1{
     text-align: center;
@@ -94,3 +90,8 @@ form > *{
     border
 } */
 /* Make grid box */
+/* body{
+    width: 100vw;
+    height: 100vh;
+
+} */
