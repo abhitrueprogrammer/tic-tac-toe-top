@@ -86,12 +86,8 @@ h1 {
 }
 
 .form-area {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
     margin: 0;
-    padding: 0;
+    padding: 16px;
 }
 form > *{
     padding: 5px;
