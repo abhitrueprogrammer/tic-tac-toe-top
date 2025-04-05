@@ -1,12 +1,5 @@
 const GameBoard = (function (){
-    // let _ticTacToeArray = [[null, null, null]
-    //                 ,[null, null, null]
-    //                 ,[null, null, null]]; //null means nothing added yet
     const emptySquare = '';
-    // let _ticTacToeArray = [['x', '', 'o']
-    //                 ,['o', 'o', 'x']
-    //                 ,['x', 'x', 'x']]; //null means nothing added yet
-    
     const _ticTacToeArrayInitial = [['', '', '']
                     ,['', '', '']
                     ,['', '', '']]; //null means nothing added yet
@@ -136,12 +129,6 @@ const DisplayController = (function(){
         nextPlayerMessage.textContent = `${nextPlayer}'s turn.`
     }
     updateBoard = () => {
-        // for(let i = 0; i < GameBoard.getDimention(); i++){
-        //     for(let j = 0; j < GameBoard.getDimention(); j++){
-        //         const cell = document.querySelector(`#c${i}${j}`);
-        //         cell.textContent = _ticTacToeArray[i][j];
-        //     }
-        // }
         const cells = document.querySelectorAll('.cell');
         console.log(cells);
         for(cell of cells){
