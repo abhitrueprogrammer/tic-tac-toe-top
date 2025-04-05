@@ -1,5 +1,10 @@
+body {
+    background-color: #1a1a1a;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+}
 
-.game-board{
+.game-board {
     display: grid;
     min-height: 299px;
     min-width: 299px;
@@ -10,79 +15,102 @@
     margin: 50px;
     font-size: 4rem;
     gap: 10px;
-    background-color: black;
+    background-color: #2c2c2c;
+    border: 2px solid #d4af37;
 }
-.game-board > div{
+
+.game-board > div {
     width: 100%;
     height: 100%;
-    background-color: white;
+    background-color: #1a1a1a;
+    border: 1px solid #d4af37;
 }
-.form-area{
+
+.form-area {
     margin-top: 30px;
     margin-left: 30px; 
 }
-.cell{
+
+.cell {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-dialog[open]{
+
+dialog[open] {
     font-size: 4rem;
     width: 350px;
     display: grid;
     justify-content: center;
-    /* position: relative;
-    top: 0; */
-    background-color: rgba(255, 255, 255, 0.966);
+    background-color: rgba(26, 26, 26, 0.9);
+    border: 2px solid #d4af37;
+    color: #d4af37;
 }
-dialog[open] button{
+
+dialog[open] button {
     grid-row: 2/3;
     padding: 20px;
     border-radius: 3px;
     font-size: 2rem;
-    color: white;
+    color: #1a1a1a;
     font-weight: 800;
-    background-color: rgb(255, 140, 140);
+    background-color: #d4af37;
+    border: none;
+    cursor: pointer;
 }
-dialog[open] button:hover{
-    background-color: rgb(255, 86, 86);
+
+dialog[open] button:hover {
+    background-color: #b8960f;
 }
-dialog[open] button:active{
-    background-color: rgb(255, 206, 206);
+
+dialog[open] button:active {
+    background-color: #e6c349;
 }
-body > h1{
+
+body > h1 {
     text-align: center;
     margin-top: 30px;
-
 }
-.form-board-area{
+
+.form-board-area {
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 1fr 5fr 1fr;
     justify-content: center;
 }
-.error-msg{
-    color: red;
+
+.error-msg {
+    color: #ff4136;
     text-align: center;
     font-weight: 600;
 }
-form > *{
+
+form > * {
     padding: 5px;
     margin: 10px;
 }
-.game-board-area{
+
+input[type="text"] {
+    background-color: #2c2c2c;
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    padding: 5px;
+}
+
+.game-board-area {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.next-player-msg{
+
+.next-player-msg {
     font-size: 1.3em;
     text-align: center;
 }
-@media only screen and (max-width: 600px){
-    .form-board-area{
+
+@media only screen and (max-width: 600px) {
+    .form-board-area {
         grid-auto-flow: row;
         grid-template-columns: 1fr;
     }
-
 }
