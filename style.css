@@ -38,7 +38,7 @@ body {
 }
 
 dialog[open] {
-    font-size: 4rem;
+    font-size: 2rem;
     width: 350px;
     display: grid;
     justify-content: center;

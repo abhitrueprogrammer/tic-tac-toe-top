@@ -124,7 +124,7 @@ const DisplayController = (function(){
     }
     showNextPlayerName = (nextPlayer) => {
         const nextPlayerMessage = document.querySelector('p.next-player-msg');
-        nextPlayerMessage.textContent = `${nextPlayer === 'x' ? 'Chosen Undead X' : 'Chosen Undead O'} must fight.`
+        nextPlayerMessage.textContent = `${nextPlayer === 'x' ? 'Fire Linker X' : 'Dark Lord O'} must fight.`
     }
     updateBoard = () => {
         const cells = document.querySelectorAll('.cell');
