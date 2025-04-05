@@ -2,7 +2,7 @@ const GameBoard = (function (){
     const emptySquare = '';
     const _ticTacToeArrayInitial = [['', '', '']
                     ,['', '', '']
-                    ,['', '', '']]; //null means nothing added yet
+                    ,['', '', '']]; // Empty cells
     let _ticTacToeArray = structuredClone(_ticTacToeArrayInitial);
     rowLength = _ticTacToeArray.length;
     getDimention = ()=>{
@@ -12,7 +12,7 @@ const GameBoard = (function (){
        return _ticTacToeArray;
     };
     reset = () =>{
-        console.log(_ticTacToeArrayInitial)
+        console.log("Bonfire lit. Game reset.");
         _ticTacToeArray = structuredClone(_ticTacToeArrayInitial);
         console.log(_ticTacToeArray);
     }
@@ -82,7 +82,7 @@ const GameBoard = (function (){
         }
     }
     return {reset, emptySquare, checkForWin, returnGameBoard, getSquare, setSquare, checkForDraw, getDimention};
-    })();
+})();
 
 const DisplayControllerConsole = (function(){
     displayBoard = () =>{
@@ -94,7 +94,7 @@ const DisplayControllerConsole = (function(){
     }
     askForCrds = () =>{
         do{
-            let input = prompt("x,y:")
+            let input = prompt("Enter coordinates (x,y):")
             let x,y;
             [x,y] = input.split(",");
             x = x.trim();
@@ -102,10 +102,10 @@ const DisplayControllerConsole = (function(){
             return [x,y];
         }
         while(isNaN(x) || isNaN(y) || x < 0 || x > GameBoard.getDimention() - 1 || y < 0 || y > GameBoard.getDimention -1); 
-        //find way to display "ERROR WRONG USER INPUT" if fails. 
     }
     return{displayBoard, askForCrds};
 })();
+
 const DisplayController = (function(){
     const gameBoardHTML = document.querySelector('.game-board')
     createBoard = () =>{
@@ -120,13 +120,11 @@ const DisplayController = (function(){
                 row.appendChild(cell);
                 gameBoardHTML.appendChild(row);
             }
-            
         }
     }
-    //Takes in last player name and outputs next player name on display
     showNextPlayerName = (nextPlayer) => {
         const nextPlayerMessage = document.querySelector('p.next-player-msg');
-        nextPlayerMessage.textContent = `${nextPlayer}'s turn.`
+        nextPlayerMessage.textContent = `${nextPlayer === 'x' ? 'Chosen Undead X' : 'Chosen Undead O'} must fight.`
     }
     updateBoard = () => {
         const cells = document.querySelectorAll('.cell');
@@ -145,14 +143,15 @@ const DisplayController = (function(){
     }
     return {updateCell, updateBoard, getIJFromCellName, showNextPlayerName};
 })();
+
 function playerFactory(symbol){
     playTurn = (x, y) => {
         if(GameBoard.setSquare(symbol, x,y)){
-            console.log("Square set");
+            console.log("Soul claimed");
             return true
         }
         else{
-            console.log("Square already taken");
+            console.log("This ground is already claimed");
             return false
         }
     }
@@ -172,22 +171,20 @@ const game = (function (){
         return gameOver
     }
     function whosTurn(){
-    if(xTurn){
+        if(xTurn){
             return 'x';
         }
         else{
             return 'o';
         }
     } 
-    //Play turn with specified object
     function playTurnAndDisplay(playerObject, xPos, yPos){
         playerObject.playTurn(xPos, yPos);
         DisplayControllerConsole.displayBoard();
         DisplayController.updateCell(xPos, yPos);
     }
     function play(x, y){
-        console.log(`${whosTurn()}'s turn.`);
-        // Comment to be deleted: [x,y] = DisplayControllerConsole.askForCrds();
+        console.log(`${whosTurn() === 'x' ? 'Fire Linker X' : 'Dark Lord O'}'s turn.`);
         
         if(xTurn){
             playTurnAndDisplay(playerX, x, y);
@@ -197,12 +194,12 @@ const game = (function (){
         }
         if(GameBoard.checkForWin()){
             gameOver = true;
-            console.log(`${whosTurn()} won!`)
+            console.log(`${whosTurn()} has defeated the Lords of Cinder!`)
             return [whosTurn(), 'w'];
         }
         if(GameBoard.checkForDraw()){
             gameOver = true;
-            console.log(`tie!`);
+            console.log(`The Age of Fire fades to darkness...`);
             return [whosTurn(), 't'];
         }
         xTurn = !xTurn;
@@ -211,16 +208,12 @@ const game = (function (){
     return{getGameOver, play, whosTurn, reset};
 })();
 
-// while(!game.getGameOver()){
-//     game.play();
-// }
-
 DisplayController.showNextPlayerName(game.whosTurn());
 DisplayController.updateBoard();
 const buttons = document.querySelectorAll('.cell');
 const resetButton = document.querySelector('.reset-btn')
 resetButton.addEventListener("click",()=>{
-    console.log("reset");
+    console.log("Bonfire lit. Game reset.");
     GameBoard.reset();
     DisplayController.updateBoard();
     game.reset()
@@ -230,32 +223,30 @@ resetButton.addEventListener("click",()=>{
 })
 for(const button of buttons){
     button.addEventListener('click', (e)=>{
-        // DisplayController.updateBoard();
         const errorMessageHTML = document.querySelector('.error-msg');
         errorMessageHTML.textContent = "";
         [i,j] = DisplayController.getIJFromCellName(button.id);
         if(GameBoard.getSquare(i,j) !== GameBoard.emptySquare){
-            errorMessageHTML.textContent = "Square already taken" 
-            console.log("Square already taken");
+            errorMessageHTML.textContent = "This ground is already claimed" 
+            console.log("This ground is already claimed");
             return;
-        // [x,y] = DisplayControllerConsole.askForCrds();
         }
         [lastPlayer, state] = game.play(i,j); 
         if(state == 'w'|| state == 't'){
             const dialog = document.querySelector('dialog');
             const endGameMsg = document.querySelector('dialog p')
             if(state ==='w'){
-                console.log('winner detected!')
+                console.log('A Lord of Cinder has fallen!')
                 playerName = document.querySelector(`#${lastPlayer}-name`);
                 if(playerName.value === ""){
-                    endGameMsg.textContent = `${lastPlayer} won!`
+                    endGameMsg.textContent = `Chosen Undead ${lastPlayer.toUpperCase()} has linked the flame!`
                 }
                 else{
-                    endGameMsg.textContent = `${playerName.value} won!`
+                    endGameMsg.textContent = `${playerName.value} has linked the flame!`
                 }
             }
             else if(state==='t'){
-                endGameMsg.textContent = `Tie.`
+                endGameMsg.textContent = `The Age of Fire fades to darkness...`
             }
             dialog.showModal();
         }
@@ -263,6 +254,3 @@ for(const button of buttons){
         DisplayController.updateCell(i,j);
     })
 }
-
-
-// Display winner text. Also end game once winner is there, perhaps display modal when winner is selected.
